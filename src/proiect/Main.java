@@ -1,169 +1,149 @@
-package proiect;
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+package imag;
 import java.awt.EventQueue;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Stroke;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.Font;
+import java.awt.Color;
 
-import javax.imageio.ImageIO;
+class JPEGImageFileFilter extends FileFilter implements java.io.FileFilter
+{
+public boolean accept(File f)
+  {
+  if (f.getName().toLowerCase().endsWith(".jpeg")) return true;
+  if (f.getName().toLowerCase().endsWith(".jpg")) return true;
+  if(f.isDirectory())return true;
+  return false;
+ }
+public String getDescription()
+  {
+  return "JPEG files";
+  }
+} 
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import java.awt.Rectangle;
-import java.awt.Graphics;
-
- 
-public class Main {
-
-    public static void main(String[] args) {
-        new Main();
-    }
-    static Rectangle NullRectangle =new Rectangle(0,0);
-	static Rectangle rect= NullRectangle;
-	static int countClick= 0;
+@SuppressWarnings("serial")
+public class imagine extends JFrame {
 	
-    public Main() {
+    private JPanel contentPane;
+    File targetFile;
+    BufferedImage targetImg;
+    public JPanel panel_1;
+    int pos = 0;
+    private static final String basePath =
+    		"C:/Users/Denisa/Desktop/PIP-imagini";
+    private JButton btnNext;
 
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
-        	@Override
             public void run() {
                 try {
-                    try {
-                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-                    }
-
-                    BufferedImage img = ImageIO.read(new File("F:\\image.jpg"));
-                    final ImagePanel imgPane = new ImagePanel(img);
-                    JScrollPane scrollPane = new JScrollPane(imgPane);
-                    final JLabel report = new JLabel("...");
-
-                    imgPane.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            Point panelPoint = e.getPoint();
-                            Point imgContext = imgPane.toImageContext(panelPoint);
-                            
-                            report.setText("You clicked at " + panelPoint + " which is relative to the image " + imgContext);
-                            //System.out.println("You clicked at " + panelPoint + " which is relative to the image " + imgContext);
-                            countClick++;
-                            System.out.println( countClick);
-                            
-                            if(countClick==2)
-                            {
-                             	rect.add(e.getX(),e.getY());
-
-                            	System.out.println("2 clk");
-                             	System.out.println("Avem: "+rect.x+" "+rect.y+" "+rect.width+" "+rect.height);
-                       
-                            	 countClick= 0;
-                            	 rect= NullRectangle;
-                            
-                            }
-                            else if(countClick==1){
-                            	rect= new Rectangle(panelPoint);
-                            	
-                            	System.out.println("1 clk");
-                             	System.out.println("Avem: "+rect.x+" "+rect.y+" "+rect.width+" "+rect.height);
-
-                            }
-                           
-                        }
-                    });
-
-                    JFrame frame = new JFrame("Testing");
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.add(scrollPane);
-                    frame.add(report, BorderLayout.SOUTH);
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
+                    imagine frame = new imagine();
                     frame.setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    frame.setResizable(false);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
     }
 
-    public class ImagePanel extends JPanel {
-
-        private BufferedImage img;
-
-        public ImagePanel(BufferedImage img) {
-            this.img = img;
-        }
-
-       @Override
-       public Dimension getPreferredSize() {
-            return img == null ? super.getPreferredSize() : new Dimension(img.getWidth(), img.getHeight());
-       }
-
-        protected Point getImageLocation() {
-
-            Point p = null;
-            if (img != null) {
-                int x = (getWidth() - img.getWidth()) / 2;
-                int y = (getHeight() - img.getHeight()) / 2;
-                p = new Point(x, y);
-            }
-            return p;
-
-        }
-
-        public Point toImageContext(Point p) {
-            Point imgLocation = getImageLocation();
-            Point relative = new Point(p);
-            relative.x -= imgLocation.x;
-            relative.y -= imgLocation.y;
-            return relative;
-        }
-        
-//        @Override
-//        protected void paintComponent(Graphics g) {
-//            super.paintComponent(g);
-//            // Your code here
-//        }
-        
-        public void paint(Graphics g) {
-        	super.paint(g);
-        	Graphics2D g2d = (Graphics2D) g;
-        	
-            if (img != null) {
-                Point p = getImageLocation();
-            g.drawImage(img, p.x, p.y, this);
-            
-        	Stroke stroke1 = new BasicStroke(5f);
-        	g2d.setColor(Color.BLUE);
-        	//g.setColor(Color.BLUE);
-        	g2d.setStroke(stroke1);
- 
-        	if(rect.x!= 0 && rect.y!= 0 && rect.width!= 0 && rect.height!= 0 )
-        		g.drawRect(rect.x,rect.y,rect.width,rect.height);
-        		//g2d.drawRoundRect(rect.x,rect.y,rect.width,rect.height, 5, 5);
-        	
-        	// g.drawString("string", x, y);
-        	
-      }
-        } 
+    /**
+     * Create the frame.
+     * @return 
+     */
+    public  imagine() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 914, 692);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+       contentPane.setLayout(null);
+       
+       JButton btnBrowse = new JButton("Browse");
+       btnBrowse.setBackground(Color.LIGHT_GRAY);
+       btnBrowse.setFont(new Font("Times New Roman", Font.BOLD, 23));
+       btnBrowse.setBounds(35, 11, 184, 39);
+       contentPane.add(btnBrowse);
+       
+       panel_1 = new JPanel();
+       panel_1.setBounds(12, 56, 872, 576);
+       contentPane.add(panel_1);
+       panel_1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0,0), 1, true));
+       panel_1.setLayout(null);
+       
+       btnNext = new JButton("Next ");
+       btnNext.setBackground(Color.LIGHT_GRAY);
+       btnNext.setFont(new Font("Times New Roman", Font.BOLD, 24));
+       btnNext.setBounds(246, 11, 193, 39);
+       btnNext.addActionListener(new ActionListener() {
+       	public void actionPerformed(ActionEvent e) {
+       		
+       	}
+       });
+       contentPane.add(btnNext);
+       
+       JButton btnNewButton = new JButton("New button");
+       btnNewButton.setBounds(451, 11, 169, 35);
+       contentPane.add(btnNewButton);
+       btnBrowse.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+        	   browseButtonActionPerformed(e);  
+        	 //  String list[]=
+           }
+       });
+   }
+    public BufferedImage rescale(BufferedImage originalImage)
+    {
+        BufferedImage resizedImage = new BufferedImage(900,650, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, 900,650, null);
+        g.dispose();
+        return resizedImage;
     }
-
-}
-
-        	
+    
+    
+    public void setTarget(File reference)
+    {
+        try {
+            targetFile = reference;
+            targetImg = rescale(ImageIO.read(reference));
+        } catch (IOException ex) {
+            Logger.getLogger(imagine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        panel_1.setLayout(new BorderLayout(0, 0));
+        panel_1.add(new JLabel(new ImageIcon(targetImg))); 
+        setVisible(true);
+    }
+    private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        JFileChooser fc = new JFileChooser(basePath);
+        fc.setFileFilter(new JPEGImageFileFilter());
+        int res = fc.showOpenDialog(null);
+        try {
+            if (res == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                setTarget(file);
+            }
+           } catch (Exception iOException) {
+           }
+        panel_1.repaint();
+       }
+   }
