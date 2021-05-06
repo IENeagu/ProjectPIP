@@ -52,7 +52,7 @@ public class imagine extends JFrame {
     public static JPanel panel_1;
     int pos = 0;
     private static final String basePath =
-    		"D:/PIP-imagini";
+    		"D:/PIP-imagini"; //folder poze
     private JButton btnNext;
 
     /**
@@ -67,8 +67,8 @@ public class imagine extends JFrame {
                     imagine frame = new imagine();
                     frame.setVisible(true);
                     frame.setResizable(true);
-                    DrawRectangle drawRectangle = new DrawRectangle();
-                    drawRectangle.MainFunction();
+                   // DrawRectangle drawRectangle = new DrawRectangle();
+                  //  drawRectangle.MainFunction();
                     
                 } catch (Exception e) {
                     e.printStackTrace();
