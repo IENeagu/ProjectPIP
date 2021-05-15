@@ -61,7 +61,7 @@ public class imagine extends JFrame {
     private  final String basePath =
     		"D:/PIP-imagini"; //folder poze
     private JButton btnNext;
-    static imagine frame = new imagine();
+    static Imagine frame = new Imagine();
     static int index_list;
     String[] Elemente = new String[9];
     
@@ -95,7 +95,7 @@ public class imagine extends JFrame {
      * Create the frame.
      * @return 
      */
-    public  imagine() {
+    public  Imagine() {
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1100, 700);
