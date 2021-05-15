@@ -51,7 +51,7 @@ public String getDescription()
 } 
 
 @SuppressWarnings("serial")
-public class imagine extends JFrame {
+public class Imagine extends JFrame {
 	
     private JPanel contentPane;
     File targetFile;
@@ -241,7 +241,7 @@ public class imagine extends JFrame {
             targetFile = reference;
             targetImg = rescale(ImageIO.read(reference));
         } catch (IOException ex) {
-            Logger.getLogger(imagine.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Imagine.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         panel_1.setLayout(new BorderLayout(0, 0));
