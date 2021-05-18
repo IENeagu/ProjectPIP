@@ -30,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.Font;
@@ -64,6 +65,9 @@ public class Imagine extends JFrame {
     static Imagine frame = new Imagine();
     static int index_list;
     String[] Elemente = new String[9];
+    JLabel jl=null;
+    //Vector<Rectangle> v_rect = new Vector<Rectangle>();
+//    static boolean flag_browse=false;
     
   //***************
 
@@ -79,15 +83,16 @@ public class Imagine extends JFrame {
     /**
      * Launch the application.
      */
-    public static void main(String[] args) {
 
-        try {
-            frame.setVisible(true);
-            frame.setResizable(true);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        public static void main(String[] args) {
+
+                try {
+                    frame.setVisible(true);
+                    frame.setResizable(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+ 
     }
 
 
@@ -102,9 +107,9 @@ public class Imagine extends JFrame {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
-       contentPane.setLayout(null);
-       final JLabel report = new JLabel("...");
-       add(report);
+        contentPane.setLayout(null);
+        final JLabel report = new JLabel("...");
+        add(report);
        
        JButton btnBrowse = new JButton("Browse");
        btnBrowse.setBackground(Color.LIGHT_GRAY);
@@ -167,7 +172,7 @@ public class Imagine extends JFrame {
        btnNext = new JButton("Next ");
        btnNext.setBackground(Color.LIGHT_GRAY);
        btnNext.setFont(new Font("Times New Roman", Font.BOLD, 24));
-       btnNext.setBounds(246, 11, 193, 39);
+       btnNext.setBounds(246, 11, 184, 39);
        btnNext.addActionListener(new ActionListener() {
        	public void actionPerformed(ActionEvent e) {
        		
@@ -175,9 +180,12 @@ public class Imagine extends JFrame {
        });
        contentPane.add(btnNext);
        
-       JButton btnNewButton = new JButton("New button");
-       btnNewButton.setBounds(451, 11, 169, 35);
-       contentPane.add(btnNewButton);
+       JButton btnSaveButton = new JButton("Save");
+       btnSaveButton.setBackground(Color.LIGHT_GRAY);
+       btnSaveButton.setFont(new Font("Times New Roman", Font.BOLD, 23));
+       btnSaveButton.setBounds(457, 11, 184, 39);
+       contentPane.add(btnSaveButton);
+       
        btnBrowse.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
         	   browseButtonActionPerformed(e);  
@@ -185,13 +193,21 @@ public class Imagine extends JFrame {
            }
        });
        
+       btnSaveButton.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+        	  ///// de facut /////
+           }
+       });
+ 
+       
      //MOUSE LISTENER//
        
        //*******************************  
+
   		panel_1.addMouseListener(new MouseAdapter() {
       	    
               public void mouseClicked(MouseEvent e) {
-               
+     
                   countClick++;
                   if(countClick==2)
                       {
@@ -205,8 +221,8 @@ public class Imagine extends JFrame {
                        	v[3]=h;
                        	
                       	 countClick= 0;
-
-                      	 frame.repaint();                
+                      	
+                      	frame.repaint();                
                        	
                       }
                       else if(countClick==1){
@@ -221,12 +237,13 @@ public class Imagine extends JFrame {
                       }
               }
                 
-      });
-  }
+      }); }
+
       //************************************
    
     public BufferedImage rescale(BufferedImage originalImage)
     {
+    	System.out.println("print desenare br");
         BufferedImage resizedImage = new BufferedImage(900,650, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = resizedImage.createGraphics();
         g.drawImage(originalImage, 0, 0, 900,650, null);    
@@ -245,22 +262,29 @@ public class Imagine extends JFrame {
         }
         
         panel_1.setLayout(new BorderLayout(0, 0));
-        JLabel jl= new JLabel(new ImageIcon(targetImg));
+        if(this.jl != null)
+        {
+        	panel_1.remove(this.jl);
+        }
+        	
+         jl= new JLabel(new ImageIcon(targetImg));
         panel_1.add(jl); 
         setVisible(true);
+        
     }
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    	
         JFileChooser fc = new JFileChooser(basePath);
         fc.setFileFilter(new JPEGImageFileFilter());
         int res = fc.showOpenDialog(null);
         try {
             if (res == JFileChooser.APPROVE_OPTION) {
+            	System.out.println("print browse");
                 File file = fc.getSelectedFile();
                 setTarget(file);
             }
            } catch (Exception iOException) {
            }
-        //panel_1.repaint();
        }
   //PAINT//
     
@@ -272,16 +296,17 @@ public class Imagine extends JFrame {
     }
     @Override
     public  void paint(Graphics g) {
-
-    	Rectangle rect1=panel_1.getBounds();
+    	super.paint(g);
+//    	Rectangle rect1=panel_1.getBounds();
+    	
         Graphics2D g2d = (Graphics2D) g;
     	Stroke stroke1 = new BasicStroke(5f);
     	g2d.setColor(new Color(50,100,15*index_list));
     	g2d.setStroke(stroke1);
     	g2d.setFont(new Font("Courier New", Font.ITALIC + Font.BOLD, 20));
-    	
+
     	//if((v[2]!=0 && v[3]!=0 ) && fitsInside( new Rectangle(v[0]+15,v[1]+90,v[2],v[3]) ,panel_1.getBounds()))
-    	if((v[2]!=0 && v[3]!=0 ) && v[0]+15 >= rect1.x && v[1]+90 >= rect1.y ) //???? conditie extra
+    	if((v[2]!=0 && v[3]!=0 )  ) //conditie in caseta //???? conditie extra v[0]+15 >= rect1.x && v[1]+90 >= rect1.y 
     	{
     		g.drawString(Elemente[index_list],v[0]+15,v[1]+80);
     		g2d.drawRoundRect(v[0]+15,v[1]+90,v[2],v[3],10, 10);
