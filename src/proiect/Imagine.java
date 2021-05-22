@@ -106,42 +106,7 @@ public class Imagine extends JFrame {
      * @return 
      */
     public  Imagine() {
-
-       //JLIST//
-       //********************************
-         
-  		Elemente[0] = "masina";
-  		Elemente[1] = "semafor";
-  		Elemente[2] = "trecere";
-  		Elemente[3] = "interzis";
-  		Elemente[4] = "cedeaza";
-  		Elemente[5] = "directie";
-  		Elemente[6] = "intersectie";
-  		Elemente[7] = "atentie";
-  		Elemente[8] = "cladire";
-  			
-  		
-  		// Create JList to Show Elements Name
-  		JList ListEl = new JList(Elemente); 
-  		
-  		ListEl.setFont(new Font("Courier New", Font.ITALIC+ Font.BOLD , 20));// editare text integral lista
-  		//ListEl.setSelectedIndex(0);
-  		ListEl.setSelectionBackground(new Color(7, 90, 180));//culoare bg selectie curenta cu rgb (responsive)
-  		ListEl.setBounds(900, 56, 150,250);
-  		ListEl.setVisible(true);
-  		contentPane.add(ListEl);
-  		
-  		ListEl.addListSelectionListener(new ListSelectionListener() {
-  			@Override
-  			public void valueChanged(ListSelectionEvent e) {
-  				
-  				index_list=ListEl.getSelectedIndex();
-  			}
-  		});
-  		
-  		//**********************************************
-       
-       // ADD COMPONENTS TO FRAME
+    	  // ADD COMPONENTS TO FRAME
   		//**********************************
   		 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          setBounds(100, 100, 1100, 700);
@@ -177,6 +142,42 @@ public class Imagine extends JFrame {
        btnSaveButton.setBounds(457, 11, 184, 39);
        contentPane.add(btnSaveButton);
        //**********************************
+
+       //JLIST//
+       //********************************
+         
+  		Elemente[0] = "masina";
+  		Elemente[1] = "semafor";
+  		Elemente[2] = "trecere";
+  		Elemente[3] = "interzis";
+  		Elemente[4] = "cedeaza";
+  		Elemente[5] = "directie";
+  		Elemente[6] = "intersectie";
+  		Elemente[7] = "atentie";
+  		Elemente[8] = "cladire";
+  			
+  		
+  		// Create JList to Show Elements Name
+  		JList ListEl = new JList(Elemente); 
+  		
+  		ListEl.setFont(new Font("Courier New", Font.ITALIC+ Font.BOLD , 20));// editare text integral lista
+  		//ListEl.setSelectedIndex(0);
+  		ListEl.setSelectionBackground(new Color(7, 90, 180));//culoare bg selectie curenta cu rgb (responsive)
+  		ListEl.setBounds(900, 56, 150,250);
+  		ListEl.setVisible(true);
+  		contentPane.add(ListEl);
+  		
+  		ListEl.addListSelectionListener(new ListSelectionListener() {
+  			@Override
+  			public void valueChanged(ListSelectionEvent e) {
+  				
+  				index_list=ListEl.getSelectedIndex();
+  			}
+  		});
+  		
+  		//**********************************************
+       
+     
        
        //ADD ACTION LISTENERS FOR BUTTONS // 
        //**********************************
