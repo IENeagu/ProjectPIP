@@ -29,7 +29,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,8 +70,9 @@ public class Imagine extends JFrame {
     static int index_list;
     String[] Elemente = new String[9];
     JLabel jl=null;
-    //Vector<Rectangle> v_rect = new Vector<Rectangle>();
-//    static boolean flag_browse=false;
+
+    Vector<Rectangle> v_rect = new Vector<Rectangle>();
+    Vector<String> v_name = new Vector<String>();
     
   //***************
 
@@ -196,6 +201,8 @@ public class Imagine extends JFrame {
        btnSaveButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
         	  ///// de facut /////
+           	Scrie s= new Scrie();
+        	s.scriereFisier(v,Elemente[index_list]);   
            }
        });
  
@@ -220,6 +227,9 @@ public class Imagine extends JFrame {
                        	v[2]=w;
                        	v[3]=h;
                        	
+                       	Rectangle rect1=new Rectangle(v[0],v[1],v[2],v[3]);
+                    	v_rect.add(rect1);
+                    	v_name.add(Elemente[index_list]);
                       	 countClick= 0;
                       	
                       	frame.repaint();                
@@ -243,7 +253,6 @@ public class Imagine extends JFrame {
    
     public BufferedImage rescale(BufferedImage originalImage)
     {
-    	System.out.println("print desenare br");
         BufferedImage resizedImage = new BufferedImage(900,650, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = resizedImage.createGraphics();
         g.drawImage(originalImage, 0, 0, 900,650, null);    
@@ -279,7 +288,6 @@ public class Imagine extends JFrame {
         int res = fc.showOpenDialog(null);
         try {
             if (res == JFileChooser.APPROVE_OPTION) {
-            	System.out.println("print browse");
                 File file = fc.getSelectedFile();
                 setTarget(file);
             }
@@ -289,27 +297,34 @@ public class Imagine extends JFrame {
   //PAINT//
     
     //**************************************
-    public static boolean fitsInside(Rectangle rec1, Rectangle rec2) {
-
-    	return (rec1.width < rec2.width && rec1.height < rec2.height);
+    
+//    public static boolean fitsInside(Rectangle rec1, Rectangle rec2) {
+//
+//    	return (rec1.width < rec2.width && rec1.height < rec2.height);
          
-    }
+//    }
+    
     @Override
     public  void paint(Graphics g) {
     	super.paint(g);
-//    	Rectangle rect1=panel_1.getBounds();
+    	
+    	//Rectangle rectNou=new Rectangle(v[0],v[1],v[2],v[3]);
     	
         Graphics2D g2d = (Graphics2D) g;
     	Stroke stroke1 = new BasicStroke(5f);
     	g2d.setColor(new Color(50,100,15*index_list));
     	g2d.setStroke(stroke1);
     	g2d.setFont(new Font("Courier New", Font.ITALIC + Font.BOLD, 20));
-
+   
+    	
     	//if((v[2]!=0 && v[3]!=0 ) && fitsInside( new Rectangle(v[0]+15,v[1]+90,v[2],v[3]) ,panel_1.getBounds()))
-    	if((v[2]!=0 && v[3]!=0 )  ) //conditie in caseta //???? conditie extra v[0]+15 >= rect1.x && v[1]+90 >= rect1.y 
+    	if((v[2]!=0 && v[3]!=0 ) ) //conditie in caseta //???? conditie extra v[0]+15 >= rect1.x && v[1]+90 >= rect1.y 
     	{
-    		g.drawString(Elemente[index_list],v[0]+15,v[1]+80);
-    		g2d.drawRoundRect(v[0]+15,v[1]+90,v[2],v[3],10, 10);
+    		for(int i=0; i<v_name.size();i++){
+	    		g.drawString(v_name.elementAt(i),v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+80);
+	    		g2d.drawRoundRect(v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+90,v_rect.elementAt(i).width,
+	    				v_rect.elementAt(i).height,10, 10);
+    		}
     		
     	}
        }
