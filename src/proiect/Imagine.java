@@ -49,11 +49,10 @@ public class Imagine extends JFrame {
   //***************
 
 	int countClick= 0;
-    int x= 0;
-	int y= 0;
-	int w= 0;
-	int h= 0;
-    int[] v={0,0,0,0};
+    static int x= 0;
+    static int y= 0;
+    static int w= 0;
+    static int h= 0;
 
  //*************************   
     
@@ -159,6 +158,9 @@ public class Imagine extends JFrame {
         	   flag_browse=true;
         	   Browse browse= new Browse();
         	   browse.browseButtonActionPerformed(e);  
+        	   
+        	   v_name.removeAllElements();
+        	   v_rect.removeAllElements();
            }
        });
        
@@ -175,7 +177,6 @@ public class Imagine extends JFrame {
        });
        btnSaveButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
-        	  ///// de facut /////
            	Scrie s= new Scrie(); 
         	s.scriereFisier(v_rect, v_name);
            }
@@ -195,12 +196,19 @@ public class Imagine extends JFrame {
 	
 	                  	h=Math.abs(y-e.getY());
 	                  	w=Math.abs(x-e.getX());
-	
-	                  	v[0]=x; v[1]=y;	v[2]=w;	v[3]=h;
-	                  	
-	                  	if(flag_browse){
-		                	v_rect.add(new Rectangle(v[0],v[1],v[2],v[3]));
+
+	                  	if(flag_browse && w!=0 && h!=0 && x+w<872 && y+h<576 && y-15>0){ 
+	                  		//content pane size : 1084x661 pixels
+	                  		// panel_1 - imag size : 872x576 pixels
+	                  		v_rect.add(new Rectangle(x,y,w,h));
 		                	v_name.add(Elemente[index_list]);
+	                  	}
+	                  	else{
+	                  		if(y-15<0)
+	                  		{
+	                  			System.out.println("text in afara");
+	                  		}
+	                  		System.out.println("nu este in chenar");
 	                  	}
 
 	                  	countClick= 0;
@@ -212,9 +220,6 @@ public class Imagine extends JFrame {
 	                  	
 	                  	x=e.getX();
 	                  	y=e.getY();
-	                  		
-	                  	v[0]=x; v[1]=y; v[2]=w; v[3]=h;
-	                  	
 	                  }
               }
                 
@@ -225,14 +230,11 @@ public class Imagine extends JFrame {
   //PAINT// 
     //**************************************
     
-//    public static boolean fitsInside(Rectangle rec1, Rectangle rec2) {
-//
-//    	return (rec1.width < rec2.width && rec1.height < rec2.height );        
-//    }
-    
     @Override
     public  void paint(Graphics g) {
     	super.paint(g);
+    	//System.out.println(frame.contentPane.getBounds());
+    	//System.out.println(frame.panel_1.getBounds());
     	
         Graphics2D g2d = (Graphics2D) g;
     	Stroke stroke1 = new BasicStroke(5f);
@@ -240,16 +242,13 @@ public class Imagine extends JFrame {
     	g2d.setStroke(stroke1);
     	g2d.setFont(new Font("Courier New", Font.ITALIC + Font.BOLD, 20));
    
-    	if((v[2]!=0 && v[3]!=0 ) && flag_browse) 
-    			//&& fitsInside( new Rectangle(v[0]+15,v[1]+90,v[2],v[3]) ,panel_1.getBounds()))
-    	{
-    		for(int i=0; i<v_name.size();i++){
-	    		g.drawString(v_name.elementAt(i),v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+80);
-	    		g2d.drawRoundRect(v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+90,v_rect.elementAt(i).width,
-	    				v_rect.elementAt(i).height,10, 10);
-    		}
-    		
-    	}
+
+		for(int i=0; i<v_name.size();i++){
+    		g.drawString(v_name.elementAt(i),v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+80);
+    		g2d.drawRoundRect(v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+90,v_rect.elementAt(i).width,
+    				v_rect.elementAt(i).height,10, 10);
+		}
+
        }
    //*******************************************
     
