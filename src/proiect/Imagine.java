@@ -203,7 +203,7 @@ public class Imagine extends JFrame {
            public void actionPerformed(ActionEvent e) {
         	  ///// de facut /////
            	Scrie s= new Scrie();
-        	s.scriereFisier(v,Elemente[index_list]);   
+           	s.scriereFisier(v_rect, v_name);   
            }
        });
       //*************************************
