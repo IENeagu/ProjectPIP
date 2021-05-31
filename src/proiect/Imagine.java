@@ -1,7 +1,6 @@
 package proiect;
 
 import java.awt.BasicStroke;
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -9,17 +8,11 @@ import java.awt.Stroke;
 
 import javax.swing.JFrame;
 
-import java.awt.BorderLayout;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
@@ -29,50 +22,29 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.awt.Font;
 import java.awt.Color;
 
-class JPEGImageFileFilter extends FileFilter implements java.io.FileFilter
-{
-public boolean accept(File f)
-  {
-  if (f.getName().toLowerCase().endsWith(".jpeg")) return true;
-  if (f.getName().toLowerCase().endsWith(".jpg")) return true;
-  if(f.isDirectory())return true;
-  return false;
- }
-public String getDescription()
-  {
-  return "JPEG files";
-  }
-} 
 
 @SuppressWarnings("serial")
 public class Imagine extends JFrame {
 	
-    private JPanel contentPane;
+	private JPanel contentPane;
     File targetFile;
     public BufferedImage targetImg;
-    public  JPanel panel_1;
-    int pos = 0;
-    private  final String basePath =
-    		"D:/PIP-imagini"; //folder poze
-    private JButton btnNext;
+    
+    public static  JPanel panel_1;
     static Imagine frame = new Imagine();
+    
     static int index_list;
     String[] Elemente = new String[9];
     JLabel jl=null;
 
     Vector<Rectangle> v_rect = new Vector<Rectangle>();
     Vector<String> v_name = new Vector<String>();
+    
+    Boolean flag_browse= false;
     
   //***************
 
@@ -89,14 +61,14 @@ public class Imagine extends JFrame {
      * Launch the application.
      */
 
-        public static void main(String[] args) {
+    public static void main(String[] args) {
 
-                try {
-                    frame.setVisible(true);
-                    frame.setResizable(false);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+		try {
+		    frame.setVisible(true);
+		    frame.setResizable(false);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
  
     }
 
@@ -106,30 +78,31 @@ public class Imagine extends JFrame {
      * @return 
      */
     public  Imagine() {
+    	
     	  // ADD COMPONENTS TO FRAME
   		//**********************************
-  		 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         setBounds(100, 100, 1100, 700);
-         contentPane = new JPanel();
-         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-         setContentPane(contentPane);
-         contentPane.setLayout(null);
-         final JLabel report = new JLabel("...");
-         add(report);
+		 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		 setBounds(100, 100, 1100, 700);
+		 contentPane = new JPanel();
+		 contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		 setContentPane(contentPane);
+		 contentPane.setLayout(null);
+		 final JLabel report = new JLabel("...");
+		 add(report);
         
-        JButton btnBrowse = new JButton("Browse");
-        btnBrowse.setBackground(Color.LIGHT_GRAY);
-        btnBrowse.setFont(new Font("Times New Roman", Font.BOLD, 23));
-        btnBrowse.setBounds(35, 11, 184, 39);
-        contentPane.add(btnBrowse);
-        
+		JButton btnBrowse = new JButton("Browse");
+		btnBrowse.setBackground(Color.LIGHT_GRAY);
+		btnBrowse.setFont(new Font("Times New Roman", Font.BOLD, 23));
+		btnBrowse.setBounds(35, 11, 184, 39);
+		contentPane.add(btnBrowse);
+
        panel_1 = new JPanel();
        panel_1.setBounds(12, 56, 872, 576);
        contentPane.add(panel_1);
        panel_1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0,0), 1, true));
        panel_1.setLayout(null);
        
-       btnNext = new JButton("Undo ");
+       JButton btnNext= new JButton("Undo ");
        btnNext.setBackground(Color.LIGHT_GRAY);
        btnNext.setFont(new Font("Times New Roman", Font.BOLD, 24));
        btnNext.setBounds(246, 11, 184, 39);
@@ -183,8 +156,9 @@ public class Imagine extends JFrame {
        //**********************************
        btnBrowse.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
-        	   browseButtonActionPerformed(e);  
-        	 //  String list[]=
+        	   flag_browse=true;
+        	   Browse browse= new Browse();
+        	   browse.browseButtonActionPerformed(e);  
            }
        });
        
@@ -198,12 +172,12 @@ public class Imagine extends JFrame {
           		}
           		frame.repaint();
           	}
-          });
+       });
        btnSaveButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
         	  ///// de facut /////
-           	Scrie s= new Scrie();
-           	s.scriereFisier(v_rect, v_name);   
+           	Scrie s= new Scrie(); 
+        	s.scriereFisier(v_rect, v_name);
            }
        });
       //*************************************
@@ -215,91 +189,46 @@ public class Imagine extends JFrame {
       	    
               public void mouseClicked(MouseEvent e) {
      
-                  countClick++;
-                  if(countClick==2)
-                      {
+	              countClick++;
+	              if(countClick==2)
+	                  {
+	
+	                  	h=Math.abs(y-e.getY());
+	                  	w=Math.abs(x-e.getX());
+	
+	                  	v[0]=x; v[1]=y;	v[2]=w;	v[3]=h;
+	                  	
+	                  	if(flag_browse){
+		                	v_rect.add(new Rectangle(v[0],v[1],v[2],v[3]));
+		                	v_name.add(Elemente[index_list]);
+	                  	}
 
-                      	h=Math.abs(y-e.getY());
-                      	w=Math.abs(x-e.getX());
-
-                      	v[0]=x; v[1]=y;	v[2]=w;	v[3]=h;
-
-                    	v_rect.add(new Rectangle(v[0],v[1],v[2],v[3]));
-                    	v_name.add(Elemente[index_list]);
-                    	
-                      	countClick= 0;
-                      	
-                      	frame.repaint();                
-                       	
-                      }
-                      else if(countClick==1){
-                      	
-                      	x=e.getX();
-                      	y=e.getY();
-                      		
-                      	v[0]=x; v[1]=y; v[2]=w; v[3]=h;
-                      	
-                      }
+	                  	countClick= 0;
+	                  	
+	                  	frame.repaint();                
+	                   	
+	                  }
+	                  else if(countClick==1){
+	                  	
+	                  	x=e.getX();
+	                  	y=e.getY();
+	                  		
+	                  	v[0]=x; v[1]=y; v[2]=w; v[3]=h;
+	                  	
+	                  }
               }
                 
       }); }
       //************************************
     
-   //SOME METHODS FOR BROWSE ACTION
-   //************************************
-    
-    public BufferedImage rescale(BufferedImage originalImage)
-    {
-        BufferedImage resizedImage = new BufferedImage(900,650, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, 900,650, null);    
-        g.dispose();
-        return resizedImage;
-    }
-    
-    
-    public void setTarget(File reference)
-    {
-        try {
-            targetFile = reference;
-            targetImg = rescale(ImageIO.read(reference));
-        } catch (IOException ex) {
-            Logger.getLogger(Imagine.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        panel_1.setLayout(new BorderLayout(0, 0));
-        if(this.jl != null)
-        {
-        	panel_1.remove(this.jl);
-        }
-        	
-         jl= new JLabel(new ImageIcon(targetImg));
-        panel_1.add(jl); 
-        setVisible(true);
-        
-    }
-    private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    	
-        JFileChooser fc = new JFileChooser(basePath);
-        fc.setFileFilter(new JPEGImageFileFilter());
-        int res = fc.showOpenDialog(null);
-        try {
-            if (res == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                setTarget(file);
-            }
-           } catch (Exception iOException) {
-           }
-       }
-  //************************************
     
   //PAINT// 
     //**************************************
     
-    public static boolean fitsInside(Rectangle rec1, Rectangle rec2) {
-
-    	return (rec1.width < rec2.width && rec1.height < rec2.height );        
-    }
+//    public static boolean fitsInside(Rectangle rec1, Rectangle rec2) {
+//
+//    	return (rec1.width < rec2.width && rec1.height < rec2.height );        
+//    }
     
     @Override
     public  void paint(Graphics g) {
@@ -307,11 +236,12 @@ public class Imagine extends JFrame {
     	
         Graphics2D g2d = (Graphics2D) g;
     	Stroke stroke1 = new BasicStroke(5f);
-    	g2d.setColor(new Color(50,100,15*index_list));
+    	g2d.setColor(new Color((index_list*index_list*index_list)%256,100,15*index_list));
     	g2d.setStroke(stroke1);
     	g2d.setFont(new Font("Courier New", Font.ITALIC + Font.BOLD, 20));
    
-    	if((v[2]!=0 && v[3]!=0 && fitsInside( new Rectangle(v[0]+15,v[1]+90,v[2],v[3]) ,panel_1.getBounds()))) 
+    	if((v[2]!=0 && v[3]!=0 ) && flag_browse) 
+    			//&& fitsInside( new Rectangle(v[0]+15,v[1]+90,v[2],v[3]) ,panel_1.getBounds()))
     	{
     		for(int i=0; i<v_name.size();i++){
 	    		g.drawString(v_name.elementAt(i),v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+80);

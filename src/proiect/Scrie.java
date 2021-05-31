@@ -1,8 +1,6 @@
 package proiect;
 
 import java.awt.Rectangle;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Vector;
