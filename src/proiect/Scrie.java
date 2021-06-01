@@ -17,7 +17,7 @@ public class Scrie {
 	void scriereFisier(Vector<Rectangle> v_rect, Vector<String> v_name)
 		{
 	    try{
-	    	FileWriter fileWriter = new FileWriter("D:\\PIP-imagini\\out.txt");
+	    	FileWriter fileWriter = new FileWriter("C:\\Users\\User\\Desktop\\PIP-imagini\\out.txt");
 	        PrintWriter printWriter = new PrintWriter(fileWriter);
 	        
 	    	for(int i=0; i<v_name.size(); i++)
