@@ -4,7 +4,14 @@ import java.awt.Rectangle;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Vector;
-
+/** Clasa <b>Scrie</b> creata pentru salvarea informatiilor (coordonate,nume) despre obiectul incadrat 
+ *                     din imaginea incarcata in GUI.
+ *  
+ *  
+ *        
+ * @author Neagu Irina Elena 
+ *
+ */
 public class Scrie {
 
 	void scriereFisier(Vector<Rectangle> v_rect, Vector<String> v_name)

@@ -13,6 +13,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 
+
+/** Clasa <b>Browse</b> creata pentru incarcarea fisierelor pe gui.
+ * 
+ *  <b>basePath</b> - variabila care stocheaza calea catre fisierele pentru upload.                  
+ *  
+ *  
+ *        
+ * @author Neagu Irina Elena 
+ *
+ */
 public class Browse {
 	 private  final String basePath =
 	    		"D:/PIP-imagini"; //folder poze
