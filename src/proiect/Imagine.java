@@ -88,12 +88,6 @@ public class Imagine extends JFrame {
 		 contentPane.setLayout(null);
 		 final JLabel report = new JLabel("...");
 		 add(report);
-        
-		JButton btnBrowse = new JButton("Browse");
-		btnBrowse.setBackground(Color.LIGHT_GRAY);
-		btnBrowse.setFont(new Font("Times New Roman", Font.BOLD, 23));
-		btnBrowse.setBounds(35, 11, 184, 39);
-		contentPane.add(btnBrowse);
 
        panel_1 = new JPanel();
        panel_1.setBounds(12, 56, 872, 576);
@@ -101,18 +95,32 @@ public class Imagine extends JFrame {
        panel_1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0,0), 1, true));
        panel_1.setLayout(null);
        
-       JButton btnNext= new JButton("Undo ");
-       btnNext.setBackground(Color.LIGHT_GRAY);
-       btnNext.setFont(new Font("Times New Roman", Font.BOLD, 24));
-       btnNext.setBounds(246, 11, 184, 39);
-     
-       contentPane.add(btnNext);
        
-       JButton btnSaveButton = new JButton("Save");
-       btnSaveButton.setBackground(Color.LIGHT_GRAY);
-       btnSaveButton.setFont(new Font("Times New Roman", Font.BOLD, 23));
-       btnSaveButton.setBounds(457, 11, 184, 39);
-       contentPane.add(btnSaveButton);
+       
+		JButton btnBrowse = new JButton("Browse");
+		btnBrowse.setBackground(Color.LIGHT_GRAY);
+		btnBrowse.setFont(new Font("Times New Roman", Font.BOLD, 23));
+		btnBrowse.setBounds(35, 11, 184, 39);
+		contentPane.add(btnBrowse);
+       
+		JButton btnUndo= new JButton("Undo");
+		btnUndo.setBackground(Color.LIGHT_GRAY);
+		btnUndo.setFont(new Font("Times New Roman", Font.BOLD, 24));
+		btnUndo.setBounds(246, 11, 184, 39);    
+		contentPane.add(btnUndo);
+       
+       JButton btnSave = new JButton("Save");
+       btnSave.setBackground(Color.LIGHT_GRAY);
+       btnSave.setFont(new Font("Times New Roman", Font.BOLD, 23));
+       btnSave.setBounds(457, 11, 184, 39);
+       contentPane.add(btnSave);
+       
+//       JButton btnNext= new JButton("Next");
+//       btnNext.setBackground(Color.LIGHT_GRAY);
+//       btnNext.setFont(new Font("Times New Roman", Font.BOLD, 24));
+//       btnNext.setBounds(665, 11, 184, 39);
+//       contentPane.add(btnNext);
+       
        //**********************************
 
        //JLIST//
@@ -164,7 +172,7 @@ public class Imagine extends JFrame {
            }
        });
        
-       btnNext.addActionListener(new ActionListener() {
+       btnUndo.addActionListener(new ActionListener() {
           	public void actionPerformed(ActionEvent e) {
           		
           		if( !v_rect.isEmpty() && !v_name.isEmpty() )
@@ -175,7 +183,7 @@ public class Imagine extends JFrame {
           		frame.repaint();
           	}
        });
-       btnSaveButton.addActionListener(new ActionListener() {
+       btnSave.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
            	Scrie s= new Scrie(); 
         	s.scriereFisier(v_rect, v_name);
@@ -197,20 +205,19 @@ public class Imagine extends JFrame {
 	                  	h=Math.abs(y-e.getY());
 	                  	w=Math.abs(x-e.getX());
 
-	                  	if(flag_browse && w!=0 && h!=0 && x+w<872 && y+h<576 && y-15>0){ 
+	                  	if(y>e.getY()|| x>e.getX())
+	                  	{
+	                  		y=e.getY();
+	                  		x=e.getX();
+	                  	}
+	                  	if(flag_browse && w!=0 && h!=0 && x+w<872 && y+h<576 && y-10>0  ){ 
 	                  		//content pane size : 1084x661 pixels
 	                  		// panel_1 - imag size : 872x576 pixels
+
 	                  		v_rect.add(new Rectangle(x,y,w,h));
 		                	v_name.add(Elemente[index_list]);
 	                  	}
-	                  	else{
-	                  		if(y-15<0)
-	                  		{
-	                  			System.out.println("text in afara");
-	                  		}
-	                  		System.out.println("nu este in chenar");
-	                  	}
-
+	                  	
 	                  	countClick= 0;
 	                  	
 	                  	frame.repaint();                
@@ -244,7 +251,20 @@ public class Imagine extends JFrame {
    
 
 		for(int i=0; i<v_name.size();i++){
-    		g.drawString(v_name.elementAt(i),v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+80);
+			if(v_rect.elementAt(i).x>795){	
+				
+				if(v_name.elementAt(i)=="intersectie")
+				{
+					g.drawString(v_name.elementAt(i),v_rect.elementAt(i).x-100,v_rect.elementAt(i).y+85);
+				}
+				else{
+					g.drawString(v_name.elementAt(i),v_rect.elementAt(i).x-55,v_rect.elementAt(i).y+85);
+				}
+			}
+			else{
+				g.drawString(v_name.elementAt(i),v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+85);
+			}
+				
     		g2d.drawRoundRect(v_rect.elementAt(i).x+15,v_rect.elementAt(i).y+90,v_rect.elementAt(i).width,
     				v_rect.elementAt(i).height,10, 10);
 		}
