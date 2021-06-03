@@ -220,7 +220,7 @@ public class Imagine extends JFrame {
 	                  	
 	                  	countClick= 0;
 	                  	
-	                  	frame.repaint();                
+	                  	frame.repaint();          //      
 	                   	
 	                  }
 	                  else if(countClick==1){
