@@ -43,7 +43,7 @@ public class Imagine extends JFrame {
 
     Vector<Rectangle> v_rect = new Vector<Rectangle>();
     Vector<String> v_name = new Vector<String>();
-    
+    Vector<Integer> v_index = new Vector<Integer>();
     Boolean flag_browse= false;
     
   //***************
@@ -85,6 +85,7 @@ public class Imagine extends JFrame {
 		 contentPane = new JPanel();
 		 contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		 setContentPane(contentPane);
+		 contentPane.setBackground(new java.awt.Color(255, 244, 233));
 		 contentPane.setLayout(null);
 		 final JLabel report = new JLabel("...");
 		 add(report);
@@ -92,25 +93,26 @@ public class Imagine extends JFrame {
        panel_1 = new JPanel();
        panel_1.setBounds(12, 56, 872, 576);
        contentPane.add(panel_1);
-       panel_1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0,0), 1, true));
+       panel_1.setBackground(new java.awt.Color(236, 226, 208  ));
+       panel_1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(231, 207, 188), 1, true));
        panel_1.setLayout(null);
        
        
        
 		JButton btnBrowse = new JButton("Browse");
-		btnBrowse.setBackground(Color.LIGHT_GRAY);
+		btnBrowse.setBackground(new java.awt.Color (228, 190, 158 ));
 		btnBrowse.setFont(new Font("Times New Roman", Font.BOLD, 23));
 		btnBrowse.setBounds(35, 11, 184, 39);
 		contentPane.add(btnBrowse);
        
 		JButton btnUndo= new JButton("Undo");
-		btnUndo.setBackground(Color.LIGHT_GRAY);
+		btnUndo.setBackground(new java.awt.Color (228, 190, 158 ));
 		btnUndo.setFont(new Font("Times New Roman", Font.BOLD, 24));
 		btnUndo.setBounds(246, 11, 184, 39);    
 		contentPane.add(btnUndo);
        
        JButton btnSave = new JButton("Save");
-       btnSave.setBackground(Color.LIGHT_GRAY);
+       btnSave.setBackground(new java.awt.Color (228, 190, 158 ));
        btnSave.setFont(new Font("Times New Roman", Font.BOLD, 23));
        btnSave.setBounds(457, 11, 184, 39);
        contentPane.add(btnSave);
@@ -142,7 +144,9 @@ public class Imagine extends JFrame {
   		
   		ListEl.setFont(new Font("Courier New", Font.ITALIC+ Font.BOLD , 20));// editare text integral lista
   		//ListEl.setSelectedIndex(0);
-  		ListEl.setSelectionBackground(new Color(7, 90, 180));//culoare bg selectie curenta cu rgb (responsive)
+  		ListEl.setSelectionBackground(new java.awt.Color(255, 244, 233));//culoare bg selectie curenta cu rgb (responsive)
+  		ListEl.setBackground(new java.awt.Color (228, 190, 158 ));
+ 
   		ListEl.setBounds(900, 56, 150,250);
   		ListEl.setVisible(true);
   		contentPane.add(ListEl);
@@ -169,6 +173,7 @@ public class Imagine extends JFrame {
         	   
         	   v_name.removeAllElements();
         	   v_rect.removeAllElements();
+        	   v_index.removeAllElements();
            }
        });
        
@@ -179,6 +184,7 @@ public class Imagine extends JFrame {
           		{
           			v_rect.remove(v_rect.lastElement());
           			v_name.remove(v_name.lastElement());
+          			v_index.remove(v_index.lastElement());
           		}
           		frame.repaint();
           	}
@@ -216,11 +222,12 @@ public class Imagine extends JFrame {
 
 	                  		v_rect.add(new Rectangle(x,y,w,h));
 		                	v_name.add(Elemente[index_list]);
+		                	v_index.add(index_list);
 	                  	}
 	                  	
 	                  	countClick= 0;
 	                  	
-	                  	frame.repaint();          //      
+	                  	frame.repaint();            
 	                   	
 	                  }
 	                  else if(countClick==1){
@@ -251,6 +258,10 @@ public class Imagine extends JFrame {
    
 
 		for(int i=0; i<v_name.size();i++){
+			
+			int a=(-16*v_index.elementAt(i)*v_index.elementAt(i)+128*v_index.elementAt(i))%256;
+			g2d.setColor(new Color((v_index.elementAt(i)*v_index.elementAt(i)*v_index.elementAt(i))%256,(255-v_index.elementAt(i)*31),a));
+			
 			if(v_rect.elementAt(i).x>795){	
 				
 				if(v_name.elementAt(i)=="intersectie")
